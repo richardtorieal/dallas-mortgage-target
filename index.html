@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DFW Target Mortgage Calculator</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="glow-bg"></div>
+    <div class="app-container">
+      <header>
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+          </svg>
+          <h1>DFW Target Mortgage Calculator</h1>
+        </div>
+        <p class="subtitle">Find your target home price or monthly payment using local Collin/Dallas County tax averages.</p>
+      </header>
+
+      <main>
+        <!-- Calculator Toggle -->
+        <div class="toggle-container">
+          <button id="toggle-target" class="toggle-btn active" aria-pressed="true">
+            Target Home Price
+          </button>
+          <button id="toggle-payment" class="toggle-btn" aria-pressed="false">
+            Monthly Payment
+          </button>
+        </div>
+
+        <div class="grid-layout">
+          <!-- Inputs Card -->
+          <section class="card inputs-card">
+            <h2 class="card-title">Adjust Assumptions</h2>
+            <form id="calc-form" onsubmit="event.preventDefault();">
+              
+              <!-- Dynamic Primary Input Group -->
+              <div class="form-group primary-group" id="group-target-budget">
+                <label for="input-target-budget">Target Monthly Budget</label>
+                <div class="input-with-symbol prefix">
+                  <span class="symbol">$</span>
+                  <input type="number" id="input-target-budget" name="target_budget" value="2500" min="500" max="20000" step="50" required>
+                </div>
+                <input type="range" id="range-target-budget" min="1000" max="8000" step="100" value="2500" aria-label="Target Monthly Budget Range">
+              </div>
+
+              <div class="form-group primary-group hidden" id="group-home-price">
+                <label for="input-home-price">Home Purchase Price</label>
+                <div class="input-with-symbol prefix">
+                  <span class="symbol">$</span>
+                  <input type="number" id="input-home-price" name="home_price" value="449000" min="50000" max="3000000" step="1000">
+                </div>
+                <input type="range" id="range-home-price" min="150000" max="1000000" step="5000" value="449000" aria-label="Home Purchase Price Range">
+              </div>
+
+              <!-- General Variables Grid -->
+              <div class="inputs-grid">
+                
+                <div class="form-group">
+                  <label for="input-interest-rate">Interest Rate</label>
+                  <div class="input-with-symbol suffix">
+                    <input type="number" id="input-interest-rate" name="interest_rate" value="6.5" min="1" max="15" step="0.1" required>
+                    <span class="symbol">%</span>
+                  </div>
+                  <input type="range" id="range-interest-rate" min="3" max="10" step="0.1" value="6.5" aria-label="Interest Rate Range">
+                </div>
+
+                <div class="form-group">
+                  <label for="input-tax-rate">Property Tax Rate (Annual)</label>
+                  <div class="input-with-symbol suffix">
+                    <input type="number" id="input-tax-rate" name="tax_rate" value="2.1" min="0" max="5" step="0.01" required>
+                    <span class="symbol">%</span>
+                  </div>
+                  <input type="range" id="range-tax-rate" min="1.0" max="3.0" step="0.05" value="2.10" aria-label="Tax Rate Range">
+                  <div class="region-hint">DFW average is ~2.1%</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input-ins-rate">Home Insurance Rate (Annual)</label>
+                  <div class="input-with-symbol suffix">
+                    <input type="number" id="input-ins-rate" name="ins_rate" value="0.55" min="0" max="2" step="0.01" required>
+                    <span class="symbol">%</span>
+                  </div>
+                  <input type="range" id="range-ins-rate" min="0.2" max="1.2" step="0.05" value="0.55" aria-label="Insurance Rate Range">
+                  <div class="region-hint">TX average is ~0.55%</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input-hoa-fee">Monthly HOA Fee</label>
+                  <div class="input-with-symbol prefix">
+                    <span class="symbol">$</span>
+                    <input type="number" id="input-hoa-fee" name="hoa_fee" value="60" min="0" max="2000" step="5" required>
+                  </div>
+                  <input type="range" id="range-hoa-fee" min="0" max="300" step="10" value="60" aria-label="HOA Fee Range">
+                </div>
+
+                <div class="form-group">
+                  <label for="input-pmi-rate">Annual PMI Rate</label>
+                  <div class="input-with-symbol suffix">
+                    <input type="number" id="input-pmi-rate" name="pmi_rate" value="0.70" min="0" max="3" step="0.05" required>
+                    <span class="symbol">%</span>
+                  </div>
+                  <input type="range" id="range-pmi-rate" min="0.2" max="1.5" step="0.05" value="0.70" aria-label="PMI Rate Range">
+                  <div class="region-hint">Applied if down payment &lt; 20%</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="select-loan-term">Loan Term</label>
+                  <select id="select-loan-term" name="loan_term" class="form-control select-dropdown">
+                    <option value="30">30-Year Fixed</option>
+                    <option value="20">20-Year Fixed</option>
+                    <option value="15">15-Year Fixed</option>
+                    <option value="10">10-Year Fixed</option>
+                  </select>
+                </div>
+
+              </div>
+            </form>
+          </section>
+
+          <!-- Results Card -->
+          <section class="card results-card">
+            <h2 class="card-title" id="results-title">Target Home Purchase Price</h2>
+            
+            <div id="target-results-view" class="results-container">
+              <!-- Side by Side Down Payment Scenarios -->
+              <div class="scenarios-grid">
+                
+                <!-- 20% Down Card -->
+                <div class="scenario-card premium">
+                  <div class="badge">Recommended</div>
+                  <h3>20% Down Payment</h3>
+                  <div class="amount-val" id="val-target-price-20">$348,175</div>
+                  <div class="details-list">
+                    <div class="detail-row"><span>Down Payment:</span><span id="val-down-20">$69,635</span></div>
+                    <div class="detail-row"><span>Loan Amount:</span><span id="val-loan-20">$278,540</span></div>
+                    <div class="detail-row"><span>Monthly P&amp;I:</span><span id="val-pi-20">$1,761</span></div>
+                    <div class="detail-row"><span>Taxes &amp; Ins:</span><span id="val-taxins-20">$739</span></div>
+                    <div class="detail-row highlight-zero"><span>PMI:</span><span>$0 (Waived)</span></div>
+                  </div>
+                </div>
+
+                <!-- 10% Down Card -->
+                <div class="scenario-card">
+                  <h3>10% Down Payment</h3>
+                  <div class="amount-val" id="val-target-price-10">$299,855</div>
+                  <div class="details-list">
+                    <div class="detail-row"><span>Down Payment:</span><span id="val-down-10">$29,986</span></div>
+                    <div class="detail-row"><span>Loan Amount:</span><span id="val-loan-10">$269,870</span></div>
+                    <div class="detail-row"><span>Monthly P&amp;I:</span><span id="val-pi-10">$1,706</span></div>
+                    <div class="detail-row"><span>Taxes &amp; Ins:</span><span id="val-taxins-10">$637</span></div>
+                    <div class="detail-row"><span>Monthly PMI:</span><span id="val-pmi-10">$157</span></div>
+                  </div>
+                </div>
+
+                <!-- 30% Down Card -->
+                <div class="scenario-card">
+                  <h3>30% Down Payment</h3>
+                  <div class="amount-val" id="val-target-price-30">$416,527</div>
+                  <div class="details-list">
+                    <div class="detail-row"><span>Down Payment:</span><span id="val-down-30">$124,958</span></div>
+                    <div class="detail-row"><span>Loan Amount:</span><span id="val-loan-30">$291,569</span></div>
+                    <div class="detail-row"><span>Monthly P&amp;I:</span><span id="val-pi-30">$1,843</span></div>
+                    <div class="detail-row"><span>Taxes &amp; Ins:</span><span id="val-taxins-30">$885</span></div>
+                    <div class="detail-row highlight-zero"><span>PMI:</span><span>$0 (Waived)</span></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div id="payment-results-view" class="results-container hidden">
+              <!-- Payment breakdown list & Concentric visual gauge -->
+              <div class="payment-layout">
+                <div class="chart-container">
+                  <!-- Custom CSS Conic-Gradient Pie Chart / Gauge -->
+                  <div class="donut-chart" id="payment-donut">
+                    <div class="center-content">
+                      <span class="label">Total Monthly</span>
+                      <span class="value" id="val-payment-total">$3,286</span>
+                    </div>
+                  </div>
+                  <div class="down-toggle-group">
+                    <button class="down-opt active" id="btn-down-20">20% Down</button>
+                    <button class="down-opt" id="btn-down-10">10% Down</button>
+                    <button class="down-opt" id="btn-down-30">30% Down</button>
+                  </div>
+                </div>
+
+                <div class="breakdown-list">
+                  <div class="breakdown-item bg-pi">
+                    <div class="bullet"></div>
+                    <div class="info">
+                      <span class="label">Principal &amp; Interest</span>
+                      <span class="val" id="breakdown-pi">$2,270.39</span>
+                    </div>
+                  </div>
+                  <div class="breakdown-item bg-tax">
+                    <div class="bullet"></div>
+                    <div class="info">
+                      <span class="label">Property Taxes</span>
+                      <span class="val" id="breakdown-tax">$785.75</span>
+                    </div>
+                  </div>
+                  <div class="breakdown-item bg-ins">
+                    <div class="bullet"></div>
+                    <div class="info">
+                      <span class="label">Homeowners Insurance</span>
+                      <span class="val" id="breakdown-ins">$205.79</span>
+                    </div>
+                  </div>
+                  <div class="breakdown-item bg-hoa">
+                    <div class="bullet"></div>
+                    <div class="info">
+                      <span class="label">HOA Fee</span>
+                      <span class="val" id="breakdown-hoa">$60.00</span>
+                    </div>
+                  </div>
+                  <div class="breakdown-item bg-pmi" id="breakdown-pmi-row">
+                    <div class="bullet"></div>
+                    <div class="info">
+                      <span class="label">PMI</span>
+                      <span class="val" id="breakdown-pmi">$0.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <p>© 2026 DFW Mortgage Calculator. Calculations are based on typical North Texas financial assumptions.</p>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
